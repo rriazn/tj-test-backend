@@ -9,11 +9,8 @@ app.use(cors());
 app.use(express.json());
 
 
-const sessionKey = crypto.randomBytes(32).toString('hex');
-
 app.post('/login', (req, resp) => {
     const input = req.body;
-    console.log(input);
     readFile('./users.json', 'utf-8', (err, json) => {
         if(err) {
             resp.status(500).send('Server Error');
@@ -24,14 +21,14 @@ app.post('/login', (req, resp) => {
             hash.update(input.user.password);
             const hashedPassword = hash.digest('hex');
             if (hashedPassword === auth.pwHash) {
-                resp.status(200).json({
-                    user: input.user.username,
-                    token: sessionKey
-                });
+                resp.status(200).json({user: {
+                    username: input.user.username,
+                    token: userKeys[input.user.username]
+                }});
             } else {
                 resp.status(401).json({
-                    user: null,
-                    sessionKey: null
+                    username: null,
+                    token: null
                 });
             }
         } catch (e) {
@@ -42,12 +39,34 @@ app.post('/login', (req, resp) => {
 
 app.get('/auth', (req, resp) => {
     const token = req.get('Authorization');
-    if(token == sessionKey) {
-        resp.sendStatus(200);
+    if(userNames[token] != null) {
+        resp.status(200).json({user: {
+            username: userNames[token],
+            token: token
+        }})
         
     } else {
         resp.sendStatus(401);
     }
 });
 
+
+// set up map with tokens for users
+const userNames = new Map();
+const userKeys = new Map()
+readFile('./users.json', 'utf-8', (err, json) => {
+    if(err) {
+        console.error("error reading ./users.json");
+    }
+    try {
+        const users = JSON.parse(json);
+        for (const username in users) {
+            const key = crypto.randomBytes(32).toString('hex');
+            userNames[key] = username;
+            userKeys[username] = key;
+        }
+    } catch (e) {
+        console.error("error setting up key map");
+    } 
+});
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
