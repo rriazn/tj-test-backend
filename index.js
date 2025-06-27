@@ -17,10 +17,19 @@ app.post('/login', (req, resp) => {
         }
         try {
             const auth = JSON.parse(json)[input.user.username];
-            const hash = crypto.createHash('sha256');
-            hash.update(input.user.password);
-            const hashedPassword = hash.digest('hex');
-            if (hashedPassword === auth.pwHash) {
+            if(auth == null) {
+                resp.status(401).json({
+                    username: null,
+                    token: null
+                });
+                return;
+            }
+        
+            if (input.user.passwordHash === auth.pwHash) {
+                const token = crypto.randomBytes(32).toString('hex');
+                userKeys[input.user.username] = token;
+                userNames[token] = input.user.username;
+                userNumbers[input.user.username] += 1;
                 resp.status(200).json({user: {
                     username: input.user.username,
                     token: userKeys[input.user.username]
@@ -50,10 +59,27 @@ app.get('/auth', (req, resp) => {
     }
 });
 
+app.get('/logout', (req, resp) => {
+    const token = req.get('Authorization');
+    const user = userNames[token];
+    if(user != null) {
+        userNumbers[user] -= 1;
+        if(userNumbers[user] === 0) {
+            userNames[token] = null;
+            userKeys[user] = null;
+        }
+        resp.sendStatus(200);
+    } else {
+        resp.sendStatus(401);
+    }
+});
 
-// set up map with tokens for users
+
+// set up map with tokens for users and logged in clients per user
 const userNames = new Map();
-const userKeys = new Map()
+const userKeys = new Map();
+const userNumbers = new Map();
+
 readFile('./users.json', 'utf-8', (err, json) => {
     if(err) {
         console.error("error reading ./users.json");
@@ -61,9 +87,7 @@ readFile('./users.json', 'utf-8', (err, json) => {
     try {
         const users = JSON.parse(json);
         for (const username in users) {
-            const key = crypto.randomBytes(32).toString('hex');
-            userNames[key] = username;
-            userKeys[username] = key;
+            userNumbers[username] = 0;
         }
     } catch (e) {
         console.error("error setting up key map");
