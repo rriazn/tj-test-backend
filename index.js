@@ -59,6 +59,16 @@ app.get('/auth', (req, resp) => {
     }
 });
 
+app.get('/admin', (req, resp) => {
+    const token = req.get('Authorization');
+    if(userNames[token] == "admin") {
+        
+        resp.sendStatus(200);
+    } else {
+        resp.sendStatus(401);
+    }
+});
+
 app.get('/logout', (req, resp) => {
     const token = req.get('Authorization');
     const user = userNames[token];
