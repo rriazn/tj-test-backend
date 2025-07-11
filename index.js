@@ -1,7 +1,8 @@
 const express = require('express');
-const { readFile, writeFile } = require('fs');
+const { readFile, mkdir } = require('fs');
 const cors = require('cors');
 const crypto = require('crypto');
+const fs = require('fs');
 
 const app = express();
 
@@ -85,6 +86,40 @@ app.get('/logout', (req, resp) => {
 });
 
 
+
+
+// saving competition data
+
+
+app.post('/save-competition', async (req, resp) => {
+    const token = req.get('Authorization');
+    if(userNames[token] == "admin") {
+        const input = req.body;
+        const fileName = input.competition.name.toLowerCase().replace(' ', '-').concat('.json');
+        open(fileName, 'wx', (err, fd) => {
+            if(err) {
+                if(err.code != 'EEXIST') {
+                    throw err;
+                }
+            }
+            try {
+                writeMyData(fd);
+            } finally {
+                close(fd, (err) => {
+                    if (err) throw err;
+                });
+            }
+        })
+        resp.sendStatus(200);
+    } else {
+        resp.sendStatus(401);
+    }
+});
+
+
+
+
+
 // set up map with tokens for users and logged in clients per user
 const userNames = new Map();
 const userKeys = new Map();
@@ -103,4 +138,15 @@ readFile('./users.json', 'utf-8', (err, json) => {
         console.error("error setting up key map");
     } 
 });
+
+
+// ensure competitions file exists
+
+mkdir('./competitions', { recursive: true }, (err) => {
+    if(err) {
+        throw(err);
+    }
+});
+
+
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
