@@ -1,5 +1,5 @@
 const express = require('express');
-const { readFile, mkdir } = require('fs');
+const { close, readFile, mkdir, open } = require('fs');
 const cors = require('cors');
 const crypto = require('crypto');
 const fs = require('fs');
@@ -96,6 +96,7 @@ app.post('/save-competition', async (req, resp) => {
     if(userNames[token] == "admin") {
         const input = req.body;
         const fileName = input.competition.name.toLowerCase().replace(' ', '-').concat('.json');
+        console.log(fileName);
         open(fileName, 'wx', (err, fd) => {
             if(err) {
                 if(err.code != 'EEXIST') {
@@ -103,7 +104,7 @@ app.post('/save-competition', async (req, resp) => {
                 }
             }
             try {
-                writeMyData(fd);
+                console.log(fileName);
             } finally {
                 close(fd, (err) => {
                     if (err) throw err;
