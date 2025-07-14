@@ -1,5 +1,5 @@
 const express = require('express');
-const { close, readFile, mkdir, open } = require('fs');
+const { writeFileSync, unlinkSync, readFile, mkdir, open } = require('fs');
 const cors = require('cors');
 const crypto = require('crypto');
 const fs = require('fs');
@@ -88,29 +88,44 @@ app.get('/logout', (req, resp) => {
 
 
 
-// saving competition data
+// competition data
 
 
-app.post('/save-competition', async (req, resp) => {
+
+app.get('/get-competitions', (req, res) => {
     const token = req.get('Authorization');
-    if(userNames[token] == "admin") {
-        const input = req.body;
-        const fileName = input.competition.name.toLowerCase().replace(' ', '-').concat('.json');
-        console.log(fileName);
-        open(fileName, 'wx', (err, fd) => {
-            if(err) {
-                if(err.code != 'EEXIST') {
-                    throw err;
-                }
+    if(userNames[token] == 'admin') {
+        
+    }
+});
+
+app.post('delete-competition', (req, resp) => {
+    const token = req.get('Authorization');
+    if(userNames[token] == 'admin') {
+        const input = req.body.id
+        const fileName = 'competition-'.concat(input.id).concat('.json');
+        try {
+            unlinkSync('./competitions/'.concat(fileName));
+        } catch(e) {
+            throw err;
+        }
+    }
+});
+
+
+app.post('/save-competition', (req, resp) => {
+    const token = req.get('Authorization');
+    if(userNames[token] == 'admin') {
+        const input = req.body.competition;
+        const fileName = 'competition-'.concat(input.id).concat('.json');
+        try {
+            writeFileSync('./competitions/'.concat(fileName), JSON.stringify(input, null, 2));
+        } catch (err) {
+            if (err.code != 'EEXIST') {
+                resp.sendStatus(500);
+                throw err;
             }
-            try {
-                console.log(fileName);
-            } finally {
-                close(fd, (err) => {
-                    if (err) throw err;
-                });
-            }
-        })
+        }
         resp.sendStatus(200);
     } else {
         resp.sendStatus(401);
@@ -148,6 +163,8 @@ mkdir('./competitions', { recursive: true }, (err) => {
         throw(err);
     }
 });
+
+
 
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
