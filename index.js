@@ -107,8 +107,12 @@ app.post('delete-competition', (req, resp) => {
         try {
             unlinkSync('./competitions/'.concat(fileName));
         } catch(e) {
+            resp.sendStatus(500);
             throw err;
         }
+        resp.sendStatus(200);
+    } else {
+        resp.sendStatus(401);
     }
 });
 
