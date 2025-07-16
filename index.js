@@ -1,5 +1,5 @@
 const express = require('express');
-const { writeFileSync, unlinkSync, readFile, mkdir, open } = require('fs');
+const { readdir, writeFileSync, unlinkSync, readFile, mkdir, open } = require('fs');
 const cors = require('cors');
 const crypto = require('crypto');
 const fs = require('fs');
@@ -94,8 +94,21 @@ app.get('/logout', (req, resp) => {
 
 app.get('/get-competitions', (req, res) => {
     const token = req.get('Authorization');
+    let data = [];
     if(userNames[token] == 'admin') {
-        
+        readdir("./competitions").array.forEach(file => {
+            const content = fs.readFileSync("./competitions".concat(file), 'utf-8');
+            try {
+                const json = JSON.parse(content);
+                data.push(json);
+            } catch (err) {
+                console.error(`Could not parse JSON in file ${file}:`, err);
+            }
+        });
+
+        res.status(200).send(JSON.stringify(data, null, 2));
+    } else {
+        resp.sendStatus(401);
     }
 });
 
