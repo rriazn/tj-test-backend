@@ -96,8 +96,8 @@ app.get('/get-competitions', (req, res) => {
     const token = req.get('Authorization');
     let data = [];
     if(userNames[token] == 'admin') {
-        readdir("./competitions").array.forEach(file => {
-            const content = fs.readFileSync("./competitions".concat(file), 'utf-8');
+        fs.readdirSync("./competitions").forEach(file => {
+            const content = fs.readFileSync("./competitions/".concat(file), 'utf-8');
             try {
                 const json = JSON.parse(content);
                 data.push(json);
@@ -112,14 +112,14 @@ app.get('/get-competitions', (req, res) => {
     }
 });
 
-app.post('delete-competition', (req, resp) => {
+app.post('/delete-competition', (req, resp) => {
     const token = req.get('Authorization');
     if(userNames[token] == 'admin') {
         const input = req.body.id
-        const fileName = 'competition-'.concat(input.id).concat('.json');
+        const fileName = 'competition-'.concat(input).concat('.json');
         try {
             unlinkSync('./competitions/'.concat(fileName));
-        } catch(e) {
+        } catch(err) {
             resp.sendStatus(500);
             throw err;
         }
