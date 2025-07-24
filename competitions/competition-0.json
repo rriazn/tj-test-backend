@@ -1,7 +1,43 @@
 {
-  "name": "Test",
-  "date": "2025-07-14T00:00:00.000+02:00",
-  "groups": [],
-  "unassignedParticipants": [],
-  "id": 0
+  "name": "test",
+  "date": "2025-07-23",
+  "groups": [
+    {
+      "title": "ee",
+      "participants": [
+        {
+          "firstName": "Roman",
+          "lastName": "Riazanov",
+          "affiliation": "TV1848Er",
+          "setRoutine": "M9",
+          "birthDate": "2003-12-15"
+        }
+      ]
+    }
+  ],
+  "unassignedParticipants": [
+    {
+      "firstName": "Alexandra",
+      "lastName": "Riazanova",
+      "affiliation": "TV1848Er",
+      "setRoutine": "W11",
+      "birthDate": "2003-08-17"
+    },
+    {
+      "firstName": "Sven",
+      "lastName": "Schlundt",
+      "affiliation": "TV1848Er",
+      "setRoutine": "M10",
+      "birthDate": "2008-03-03"
+    },
+    {
+      "firstName": "Patrick",
+      "lastName": "Spormann",
+      "affiliation": "TV1848Er",
+      "setRoutine": "M6",
+      "birthDate": "2008-11-08"
+    }
+  ],
+  "id": 0,
+  "judges": "Standart, 6 Ausführung, Kein TOF, 1 manueller HD"
 }

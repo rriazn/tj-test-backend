@@ -10,6 +10,8 @@ app.use(cors());
 app.use(express.json());
 
 
+//login and authentication
+
 app.post('/login', (req, resp) => {
     const input = req.body;
     readFile('./users.json', 'utf-8', (err, json) => {
@@ -88,7 +90,7 @@ app.get('/logout', (req, resp) => {
 
 
 
-// competition data
+// competition setup data
 
 
 
@@ -148,6 +150,44 @@ app.post('/save-competition', (req, resp) => {
         resp.sendStatus(401);
     }
 });
+
+
+//competition execution data
+
+activeCompID = null;
+
+app.post('/set-active-comp', (req, resp) => {
+    const token = req.get('Authorization');
+    if(userNames[token] == 'admin') {
+        activeCompID = req.body.id;
+        
+        resp.sendStatus(200);
+    } else {
+        resp.sendStatus(401);
+    }
+});
+
+
+app.get('/get-active-comp', (req, resp) => {
+    const token = req.get('Authorization');
+    if(userNames[token] != null && activeCompID != null) {
+        const path = './competitions/competition-'.concat(activeCompID).concat('.json');
+        readFile(path, 'utf-8', (err, json) => {
+            if(err) {
+                resp.sendStatus(500);
+            }
+            try {
+                const compData = JSON.parse(json);
+                resp.status(200).json(compData);
+            } catch(err) {
+                console.error(err);
+                resp.sendStatus(500);
+            }
+        });
+    } else {
+        resp.sendStatus(401);
+    }
+})
 
 
 
