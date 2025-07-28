@@ -189,6 +189,16 @@ app.get('/get-active-comp', (req, resp) => {
     }
 })
 
+app.get('/stop-active-comp', (req, resp) => {
+    const token = req.get('Authorization');
+    if(userNames[token] == 'admin') {
+        activeCompID = null;
+        resp.sendStatus(200);
+    } else {
+        resp.sendStatus(401);
+    }
+})
+
 
 
 
