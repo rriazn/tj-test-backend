@@ -197,9 +197,30 @@ app.get('/stop-active-comp', (req, resp) => {
     } else {
         resp.sendStatus(401);
     }
-})
+});
 
+// group execution
 
+activeGroup = null;
+
+app.post('/set-active-group', (req, resp) => {
+    const token = req.get('Authorization');
+    if(userNames[token] == 'admin') {
+        activeGroup = req.body.group;
+        resp.sendStatus(200);
+    } else {
+        resp.sendStatus(401);
+    }
+});
+
+app.get('/get-active-group', (req, resp) => {
+    if(userNames[token] != null && activeGroup != null) {
+        const groupData = JSON.parse(activeGroup);
+        resp.send(200).json(groupData);
+    } else {
+        resp.sendStatus(401);
+    }
+});
 
 
 
@@ -221,6 +242,8 @@ readFile('./users.json', 'utf-8', (err, json) => {
         console.error("error setting up key map");
     } 
 });
+
+
 
 
 // ensure competitions file exists

@@ -1,30 +1,16 @@
 {
   "name": "test",
-  "date": "2025-07-23",
+  "date": "2025-07-30",
   "groups": [
     {
-      "title": "eaqrfqaf",
+      "title": "al2o3",
       "participants": [
-        {
-          "firstName": "Alexandra",
-          "lastName": "Riazanova",
-          "affiliation": "TV1848Er",
-          "setRoutine": "W11",
-          "birthDate": "2003-08-17"
-        },
         {
           "firstName": "Roman",
           "lastName": "Riazanov",
           "affiliation": "TV1848Er",
           "setRoutine": "M9",
           "birthDate": "2003-12-15"
-        },
-        {
-          "firstName": "Sven",
-          "lastName": "Schlundt",
-          "affiliation": "TV1848Er",
-          "setRoutine": "M10",
-          "birthDate": "2008-03-03"
         },
         {
           "firstName": "Alexandra",
@@ -36,26 +22,26 @@
       ]
     },
     {
-      "title": "wesarf",
+      "title": "edfadg",
       "participants": [
-        {
-          "firstName": "Patrick",
-          "lastName": "Spormann",
-          "affiliation": "TV1848Er",
-          "setRoutine": "M6",
-          "birthDate": "2008-11-08"
-        },
         {
           "firstName": "Sven",
           "lastName": "Schlundt",
           "affiliation": "TV1848Er",
           "setRoutine": "M10",
           "birthDate": "2008-03-03"
+        },
+        {
+          "firstName": "Patrick",
+          "lastName": "Spormann",
+          "affiliation": "TV1848Er",
+          "setRoutine": "M6",
+          "birthDate": "2008-11-08"
         }
       ]
     }
   ],
   "unassignedParticipants": [],
-  "id": 0,
-  "judges": "Standart, 6 Ausführung, Kein TOF, 1 manueller HD"
+  "id": 2,
+  "judges": "Standart, 6 Ausführung, TOF + HD"
 }
