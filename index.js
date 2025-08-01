@@ -214,9 +214,9 @@ app.post('/set-active-group', (req, resp) => {
 });
 
 app.get('/get-active-group', (req, resp) => {
+    const token = req.get('Authorization');
     if(userNames[token] != null && activeGroup != null) {
-        const groupData = JSON.parse(activeGroup);
-        resp.send(200).json(groupData);
+        resp.status(200).json(activeGroup);
     } else {
         resp.sendStatus(401);
     }
