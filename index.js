@@ -160,7 +160,7 @@ app.post('/set-active-comp', (req, resp) => {
     const token = req.get('Authorization');
     if(userNames[token] == 'admin') {
         activeCompID = req.body.id;
-        
+        activeGroup = null;
         resp.sendStatus(200);
     } else {
         resp.sendStatus(401);
@@ -193,6 +193,7 @@ app.get('/stop-active-comp', (req, resp) => {
     const token = req.get('Authorization');
     if(userNames[token] == 'admin') {
         activeCompID = null;
+        activeGroup = null;
         resp.sendStatus(200);
     } else {
         resp.sendStatus(401);

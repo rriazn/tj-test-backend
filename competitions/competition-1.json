@@ -1,7 +1,12 @@
 {
   "name": "edfsayfswfr",
   "date": "2025-07-26",
-  "groups": [],
+  "groups": [
+    {
+      "title": "fg",
+      "participants": []
+    }
+  ],
   "unassignedParticipants": [],
   "id": 1,
   "judges": "Standart, 6 Ausführung, Kein TOF/HD"
