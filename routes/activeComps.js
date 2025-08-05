@@ -14,6 +14,8 @@ router.post('/set-active-group', checkAdmin, activeCompsController.setActiveGrou
 
 router.get('/get-active-group', checkUser, activeCompsController.getActiveGroup);
 
+router.get('/get-active-part-id', checkUser, activeCompsController.getActivePartID)
+
 router.get('/next-part', checkAdmin, activeCompsController.nextPart);
 
 router.get('/stop-active-group', checkAdmin, activeCompsController.stopActiveGroup)
