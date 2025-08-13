@@ -65,6 +65,8 @@ exports.logout = (req, resp) => {
 exports.addUser = (req, resp) => {
     const username = req.body.user.username;
     const pwHash = req.body.user.pwHash;
+    const id = req.body.user.id;
+    const func = req.body.user.function;
     // tryLock
     fileService.readJson('users.json', (err, json) => {
         if(err) {
@@ -74,7 +76,11 @@ exports.addUser = (req, resp) => {
         } else {
             try {
                 let data = JSON.parse(json);
-                data[username] = pwHash;
+                data[username] = {
+                    "pwHash": pwHash,
+                    "id": id,
+                    "function": func
+                };
                 fileService.writeJson('users.json', data, (err) => {
                     // update User Maps
                     loadUsers();
