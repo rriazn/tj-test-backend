@@ -102,7 +102,7 @@ exports.addUser = (req, resp) => {
 exports.removeUser = (req, resp) => {
     const username = req.body.username;
     // tryLock
-    fileService.readJson('users.json', (json, err) => {
+    fileService.readJson('users.json', (err, json) => {
         if(err) {
             // unlock
             console.error(err);
@@ -128,4 +128,21 @@ exports.removeUser = (req, resp) => {
             }
         }
     })
+}
+
+exports.getUsers = (req, resp) => {
+    fileService.readJson('users.json', (err, json) => {
+        if(err) {
+            console.error(err);
+            resp.sendStatus(500);
+        } else {
+            let data = JSON.parse(json);
+            data = Object.entries(data).map(([key, value]) => ({
+                name: key,
+                function: value.function
+            }));
+            
+            resp.status(200).json(data);
+        }
+    });
 }

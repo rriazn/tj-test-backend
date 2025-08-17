@@ -14,6 +14,8 @@ router.get('/logout', checkUser, usersController.logout);
 
 router.post('/add-user', checkAdmin, usersController.addUser);
 
-router.post('remove-user', checkAdmin, usersController.removeUser);
+router.post('/remove-user', checkAdmin, usersController.removeUser);
+
+router.get('/get-users', checkAdmin, usersController.getUsers);
 
 module.exports = router;
