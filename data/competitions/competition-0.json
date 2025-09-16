@@ -1,7 +1,110 @@
 {
-  "name": "aefrdsaefa",
-  "date": "2025-08-03",
-  "groups": [],
+  "name": "test",
+  "date": "2025-09-10",
+  "groups": [
+    {
+      "title": "w",
+      "participants": [
+        [
+          {
+            "firstName": "Sven",
+            "lastName": "Schlundt",
+            "affiliation": "TV1848Er",
+            "setRoutine": "M10",
+            "birthDate": "2008-03-03"
+          },
+          {
+            "execution1": 0,
+            "execution2": 0,
+            "execution3": 0,
+            "execution": 0,
+            "execution5": 0,
+            "execution6": 0,
+            "difficulty": 0,
+            "hd": 0,
+            "tof": 0,
+            "sync1": 0,
+            "sync2": 0,
+            "penalty": 0
+          }
+        ],
+        [
+          {
+            "firstName": "Alexandra",
+            "lastName": "Riazanova",
+            "affiliation": "TV1848Er",
+            "setRoutine": "W11",
+            "birthDate": "2003-08-17"
+          },
+          {
+            "execution1": 0,
+            "execution2": 0,
+            "execution3": 0,
+            "execution": 0,
+            "execution5": 0,
+            "execution6": 0,
+            "difficulty": 0,
+            "hd": 0,
+            "tof": 0,
+            "sync1": 0,
+            "sync2": 0,
+            "penalty": 0
+          }
+        ]
+      ]
+    },
+    {
+      "title": "m",
+      "participants": [
+        [
+          {
+            "firstName": "Patrick",
+            "lastName": "Spormann",
+            "affiliation": "TV1848Er",
+            "setRoutine": "M6",
+            "birthDate": "2008-11-08"
+          },
+          {
+            "execution1": 0,
+            "execution2": 0,
+            "execution3": 0,
+            "execution": 0,
+            "execution5": 0,
+            "execution6": 0,
+            "difficulty": 0,
+            "hd": 0,
+            "tof": 0,
+            "sync1": 0,
+            "sync2": 0,
+            "penalty": 0
+          }
+        ],
+        [
+          {
+            "firstName": "Roman",
+            "lastName": "Riazanov",
+            "affiliation": "TV1848Er",
+            "setRoutine": "M9",
+            "birthDate": "2003-12-15"
+          },
+          {
+            "execution1": 0,
+            "execution2": 0,
+            "execution3": 0,
+            "execution": 0,
+            "execution5": 0,
+            "execution6": 0,
+            "difficulty": 0,
+            "hd": 0,
+            "tof": 0,
+            "sync1": 0,
+            "sync2": 0,
+            "penalty": 0
+          }
+        ]
+      ]
+    }
+  ],
   "unassignedParticipants": [],
   "id": 0,
   "judges": "Standart, 4 Ausführung, Kein TOF/HD"

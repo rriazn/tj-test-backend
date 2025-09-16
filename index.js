@@ -6,6 +6,7 @@ const userService = require('./services/userService');
 const competitionsRoutes = require('./routes/competitions');
 const usersRoutes = require('./routes/users');
 const activeCompRoutes = require('./routes/activeComps');
+const dbService = require('./services/databaseService');
 
 const app = express();
 
