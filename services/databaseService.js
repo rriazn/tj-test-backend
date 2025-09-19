@@ -28,7 +28,7 @@ async function connectDB() {
 })();
 
 
-exports.getCompetitions = async () => {
+/** exports.getCompetitions = async () => {
     let [comps] = await db.query('SELECT * FROM competitions');
     comps = JSON.stringify(comps);
     comps.array.forEach(async comp => {
@@ -48,4 +48,17 @@ exports.getCompetitions = async () => {
             });
         });
     });
+} */
+exports.getAllUsernames = async () => {
+  const [usernames] = await db.query('SELECT username FROM users');
+  return usernames;
+}
+
+exports.getUser = async (username) => {
+  const [user] = await db.query(`SELECT * FROM users WHERE username = ${username}`);
+  return user;
+}
+
+exports.getAdmin = async () => {
+  return this.getUser('admin');
 }

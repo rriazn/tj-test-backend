@@ -1,11 +1,15 @@
 const fs = require('fs');
 const path = require('path');
+const dbService = require ('./databaseService')
 
 const userNames = new Map();
 const userKeys = new Map();
 const userNumbers = new Map();
 
 function loadUsers() {
+    const usernames = 
+
+    /*
     fs.readFile(path.join(__dirname, '../data/users.json'), 'utf-8', (err, json) => {
         if (err) {
             console.error("error reading ./data/users.json");
@@ -20,7 +24,7 @@ function loadUsers() {
         } catch (e) {
             console.error("error setting up user maps", e);
         }
-    });
+    });*/
 }
 
 module.exports = {
