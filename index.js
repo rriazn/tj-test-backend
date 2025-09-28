@@ -23,11 +23,18 @@ mkdir('./data/competitions', { recursive: true }, (err) => {
     }
 });
 
+async function main() {
+    await dbService.connectDB();       
+    userService.loadUsers();           
+
+    app.listen(3000, () => {
+        console.log('Server running on http://localhost:3000');
+    });
+}
 
 
-// set up map with tokens for users and logged in clients per user
-userService.loadUsers();
-
-app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+main().catch(err => {
+    console.error("Startup failed:", err);
+});
 
 

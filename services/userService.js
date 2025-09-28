@@ -6,8 +6,12 @@ const userNames = new Map();
 const userKeys = new Map();
 const userNumbers = new Map();
 
-function loadUsers() {
-    const usernames = 
+async function loadUsers() {
+    const usernames = await dbService.getAllUsernames();
+    console.log(usernames);
+    for(const username in usernames) {
+        userNumbers.set(username, 0);
+    }
 
     /*
     fs.readFile(path.join(__dirname, '../data/users.json'), 'utf-8', (err, json) => {

@@ -1,9 +1,11 @@
-import mysql from 'mysql2/promise';
-import dotenv from 'dotenv';
+dotenv = require('dotenv');
+mysql = require('mysql2/promise');
 
 dotenv.config();
 
-async function connectDB() {
+let db = null;
+
+exports.connectDB = async () => {
   try {
     const con = await mysql.createConnection({
       host: process.env.DBHOST,
@@ -13,19 +15,13 @@ async function connectDB() {
     });
 
     console.log('Connected to MySQL2 database');
+    db = con;
     return con;
   } catch (err) {
     console.error('Error connecting to MySQL2:', err);
     process.exit(1); // exit process on error
   }
 }
-
-
-(async () => {
-  const db = await connectDB();
-  const [rows] = await db.query('SELECT * FROM competitions');
-  console.log('Query result:', rows);
-})();
 
 
 /** exports.getCompetitions = async () => {
@@ -50,12 +46,13 @@ async function connectDB() {
     });
 } */
 exports.getAllUsernames = async () => {
-  const [usernames] = await db.query('SELECT username FROM users');
-  return usernames;
+  const [usernames] = await db.query('SELECT username FROM judges');
+  const values = usernames.map(obj => obj.username);
+  return values;
 }
 
 exports.getUser = async (username) => {
-  const [user] = await db.query(`SELECT * FROM users WHERE username = ${username}`);
+  const [user] = await db.query(`SELECT * FROM judges WHERE username = ${username}`);
   return user;
 }
 
