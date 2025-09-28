@@ -52,7 +52,14 @@ exports.getAllUsernames = async () => {
 }
 
 exports.getUser = async (username) => {
-  const [user] = await db.query(`SELECT * FROM judges WHERE username = ${username}`);
+  const [user] = await db.query(
+    "SELECT * FROM judges WHERE username = ?",
+    [username],
+    (err, results) => {
+      if (err) throw err;
+      console.log(results);
+    }
+  );
   return user;
 }
 

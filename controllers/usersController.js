@@ -1,39 +1,27 @@
 const fileService = require('../services/fileServices');
+const dbService = require('../services/databaseService');
 const { loadUsers, userNames, userNumbers, userKeys } = require('../services/userService');
 const crypto = require('crypto');
 
-exports.login = (req, resp) => {
+exports.login = async (req, resp) => {
     const input = req.body;
-    fileService.readJson('users.json', (err, json) => {
-        if(err) {
-            console.error(err);
-            resp.sendStatus(500);
-        } else {
-            try {
-                const auth = JSON.parse(json)[input.user.username];
-                if(auth == null) {
-                    resp.sendStatus(401);
-                    return;
-                }
-            
-                if (input.user.passwordHash === auth.pwHash) {
-                    const token = crypto.randomBytes(32).toString('hex');
-                    userKeys[input.user.username] = token;
-                    userNames[token] = input.user.username;
-                    userNumbers[input.user.username] += 1;
-                    resp.status(200).json({user: {
-                        username: input.user.username,
-                        token: userKeys[input.user.username]
-                    }});
-                } else {
-                    resp.sendStatus(401);
-                }
-            } catch (e) {
-                console.error(e);
-                resp.sendStatus(500);
-            } 
-        }      
-    });
+    let userData = await dbService.getUser(input.user.username);
+    if(userData.length == 0) {
+        resp.sendStatus(401);
+        return;
+    }
+    if(input.user.passwordHash == userData[0].passwordHash) {
+        const token = crypto.randomBytes(32).toString('hex');
+        userKeys[input.user.username] = token;
+        userNames[token] = input.user.username;
+        userNumbers[input.user.username] += 1;
+        resp.status(200).json({user: {
+            username: input.user.username,
+            token: userKeys[input.user.username]
+        }});
+    } else {
+        resp.sendStatus(401);
+    }
 }
 
 
