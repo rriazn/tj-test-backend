@@ -4,10 +4,10 @@ const competitionsController = require('../controllers/competitionsController');
 const checkAdmin = require('../middleware/admin-auth');
 
 
-router.get('/get-competitions', checkAdmin, competitionsController.getCompetitions);
+router.get('/', checkAdmin, competitionsController.getCompetitions);
 
-router.post('/save-competition', checkAdmin, competitionsController.saveCompetition);
+router.post('/', checkAdmin, competitionsController.saveCompetition);
 
-router.post('/delete-competition', checkAdmin, competitionsController.deleteCompetition);
+router.delete('/:id', checkAdmin, competitionsController.deleteCompetition);
 
 module.exports = router

@@ -5,6 +5,7 @@ const cors = require('cors');
 const userService = require('./services/userService');
 const competitionsRoutes = require('./routes/competitions');
 const usersRoutes = require('./routes/users');
+const authRoutes = require('./routes/auth');
 const activeCompRoutes = require('./routes/activeComps');
 const dbService = require('./services/databaseService');
 
@@ -15,6 +16,7 @@ app.use(express.json());
 
 app.use('/competitions', competitionsRoutes);
 app.use('/users', usersRoutes);
+app.use('/auth', authRoutes);
 app.use('/activeComps', activeCompRoutes);
 
 mkdir('./data/competitions', { recursive: true }, (err) => {
@@ -25,7 +27,7 @@ mkdir('./data/competitions', { recursive: true }, (err) => {
 
 async function main() {
     await dbService.connectDB();       
-    userService.loadUsers();           
+    await userService.loadUsers();           
 
     app.listen(3000, () => {
         console.log('Server running on http://localhost:3000');

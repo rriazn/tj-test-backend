@@ -28,7 +28,7 @@ exports.saveCompetition = (req, resp) => {
 }
 
 exports.deleteCompetition = (req, resp) => {
-    const compID = req.body.id
+    const compID = req.params.id
     const fileName = 'competitions/competition-'.concat(compID).concat('.json');
     try {
         fileService.unlinkSync(fileName);
