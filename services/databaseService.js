@@ -23,46 +23,33 @@ exports.connectDB = async () => {
   }
 }
 
-
-/** exports.getCompetitions = async () => {
-    let [comps] = await db.query('SELECT * FROM competitions');
-    comps = JSON.stringify(comps);
-    comps.array.forEach(async comp => {
-        // get all groups
-        let [compGroups] = await db.query(`SELECT Name AS title FROM competitionGroups WHERE competiton = ${comp.ID}`);
-        compGroups = JSON.stringify(compGroups);
-
-        // get participants for each group
-        compGroups.forEach(async group => {
-            let [participants] = await db.query(`SELECT firstName, lastName, birthDate, Club AS affilitation
-                                                FROM Participants JOIN Participation ON Participants.ID = Participation.Participant
-                                                JOIN CompetitionGroup ON Participation.CompetitionGroup = CompetitionGroup.ID
-                                                WHERE CompetitionGroup.Name = ${group.name} AND Participation.Competition = ${comp.ID}`);
-            participants = JSON.stringify(participants);                                  
-            participants.forEach(async parts => {
-                let [scores] = await db.query(``)
-            });
-        });
-    });
-} */
 exports.getAllUsernames = async () => {
   const [usernames] = await db.query('SELECT username FROM judges');
   const values = usernames.map(obj => obj.username);
   return values;
 }
 
+exports.getAllUsers = async () => {
+  const [values] = await db.query('SELECT username, judgefunction FROM judges');
+  return values;
+}
+
 exports.getUser = async (username) => {
   const [user] = await db.query(
     "SELECT * FROM judges WHERE username = ?",
-    [username],
-    (err, results) => {
-      if (err) throw err;
-      console.log(results);
-    }
-  );
+    [username]);
   return user;
 }
 
 exports.getAdmin = async () => {
   return this.getUser('admin');
+}
+
+exports.addUser = async (username, pwHash, func) => {
+  await db.query("INSERT INTO judges (username, passwordhash, judgefunction) VALUES (?, ?, ?)",
+     [username, pwHash, func]);
+}
+
+exports.deleteUser = async (username) => {
+  await db.query("DELETE FROM judges WHERE username = ?", [username]);
 }

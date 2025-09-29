@@ -1,11 +1,23 @@
 const fileService = require('../services/fileServices');
 const dbService = require('../services/databaseService');
-const { loadUsers } = require('../services/userService');
+const { userKeys, userNames, userNumbers } = require('../services/userService');
 
-exports.addUser = (req, resp) => {
+exports.addUser = async (req, resp) => {
     const username = req.body.user.username;
     const pwHash = req.body.user.pwHash;
     const func = req.body.user.function;
+
+    try {
+        await dbService.addUser(username, pwHash, func);
+    } catch(err) {
+        resp.sendStatus(401);
+        throw(err);
+    }
+    userNumbers.set(username, 0);
+    resp.sendStatus(200);
+    
+
+    /*
     // tryLock
     fileService.readJson('users.json', (err, json) => {
         if(err) {
@@ -37,10 +49,28 @@ exports.addUser = (req, resp) => {
         }
     });
 
+    */
+
 }
 
-exports.removeUser = (req, resp) => {
+exports.removeUser = async (req, resp) => {
     const username = req.params.username;
+
+    try {
+        await dbService.deleteUser(username);
+    } catch(err) {
+        resp.sendStatus(500);
+        throw(err);
+    }     
+    userNumbers.delete(username);
+    const key = userKeys[username];
+    userKeys.delete(username);
+    userNames.delete(key);
+    resp.sendStatus(200);
+
+
+
+    /*
     // tryLock
     fileService.readJson('users.json', (err, json) => {
         if(err) {
@@ -67,10 +97,27 @@ exports.removeUser = (req, resp) => {
                 resp.sendStatus(500);
             }
         }
-    })
+    })*/
 }
 
-exports.getUsers = (req, resp) => {
+exports.getUsers = async (req, resp) => {
+    let users = [];
+    
+    try {
+        users = await dbService.getAllUsers();
+    } catch(err) {
+        resp.sendStatus(500);
+        throw(err);
+    }
+
+    users = users.map(({username, judgefunction}) => ({
+        name: username,
+        function: judgefunction
+    }))
+
+    resp.status(200).json(users);
+
+    /*
     fileService.readJson('users.json', (err, json) => {
         if(err) {
             console.error(err);
@@ -84,5 +131,5 @@ exports.getUsers = (req, resp) => {
             
             resp.status(200).json(data);
         }
-    });
+    });*/
 }

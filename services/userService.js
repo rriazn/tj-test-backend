@@ -8,7 +8,6 @@ const userNumbers = new Map();
 
 async function loadUsers() {
     const usernames = await dbService.getAllUsernames();
-    console.log(usernames);
     for(const username in usernames) {
         userNumbers.set(username, 0);
     }

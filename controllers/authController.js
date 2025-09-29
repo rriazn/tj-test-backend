@@ -4,7 +4,14 @@ const crypto = require('crypto');
 
 exports.login = async (req, resp) => {
     const input = req.body;
-    let userData = await dbService.getUser(input.user.username);
+    let userData = []
+    try {
+        userData = await dbService.getUser(input.user.username);
+    } catch(err) {
+        resp.sendStatus(500);
+        throw(err);
+    }
+    
     if(userData.length == 0) {
         resp.sendStatus(401);
         return;
