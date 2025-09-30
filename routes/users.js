@@ -3,7 +3,7 @@ const router = express.Router();
 const usersController = require('../controllers/usersController');
 const checkAdmin = require('../middleware/admin-auth');
 
-router.post('/', checkAdmin, usersController.addUser);
+router.post('/', checkAdmin, usersController.saveUser);
 
 router.delete('/:username', checkAdmin, usersController.removeUser);
 

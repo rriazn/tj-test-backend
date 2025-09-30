@@ -2,15 +2,20 @@ const fileService = require('../services/fileServices');
 const dbService = require('../services/databaseService');
 const { userKeys, userNames, userNumbers } = require('../services/userService');
 
-exports.addUser = async (req, resp) => {
+exports.saveUser = async (req, resp) => {
     const username = req.body.user.username;
     const pwHash = req.body.user.pwHash;
     const func = req.body.user.function;
+    const replace = req.body.replace;
 
     try {
-        await dbService.addUser(username, pwHash, func);
+        if(replace) {
+            await dbService.replaceUser(username, pwHash, func);
+        } else {
+            await dbService.addUser(username, pwHash, func);
+        }
     } catch(err) {
-        resp.sendStatus(401);
+        resp.sendStatus(500);
         throw(err);
     }
     userNumbers.set(username, 0);
@@ -52,6 +57,7 @@ exports.addUser = async (req, resp) => {
     */
 
 }
+
 
 exports.removeUser = async (req, resp) => {
     const username = req.params.username;

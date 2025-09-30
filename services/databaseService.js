@@ -19,24 +19,27 @@ exports.connectDB = async () => {
     return con;
   } catch (err) {
     console.error('Error connecting to MySQL2:', err);
-    process.exit(1); // exit process on error
+    process.exit(1);
   }
 }
 
 exports.getAllUsernames = async () => {
-  const [usernames] = await db.query('SELECT username FROM judges');
+  const [usernames] = await db.query('SELECT username \
+                                      FROM judges');
   const values = usernames.map(obj => obj.username);
   return values;
 }
 
 exports.getAllUsers = async () => {
-  const [values] = await db.query('SELECT username, judgefunction FROM judges');
+  const [values] = await db.query('SELECT username, judgefunction \
+                                  FROM judges');
   return values;
 }
 
 exports.getUser = async (username) => {
-  const [user] = await db.query(
-    "SELECT * FROM judges WHERE username = ?",
+  const [user] = await db.query("SELECT * \
+                                FROM judges \
+                                WHERE username = ?",
     [username]);
   return user;
 }
@@ -46,10 +49,20 @@ exports.getAdmin = async () => {
 }
 
 exports.addUser = async (username, pwHash, func) => {
-  await db.query("INSERT INTO judges (username, passwordhash, judgefunction) VALUES (?, ?, ?)",
+  await db.query("INSERT INTO judges (username, passwordhash, judgefunction) \
+                  VALUES (?, ?, ?)",
      [username, pwHash, func]);
 }
 
+exports.replaceUser = async(username, pwHash, func) => {
+  await db.query("UPDATE judges \
+                  SET passwordHash = ?, judgeFunction = ? \
+                  WHERE username = ?",
+      [pwHash, func, username]);
+}
+
 exports.deleteUser = async (username) => {
-  await db.query("DELETE FROM judges WHERE username = ?", [username]);
+  await db.query("DELETE FROM judges \
+                  WHERE username = ?", 
+                  [username]);
 }
