@@ -6,13 +6,14 @@ exports.saveUser = async (req, resp) => {
     const username = req.body.user.username;
     const pwHash = req.body.user.pwHash;
     const func = req.body.user.function;
+    const displayName = req.body.user.displayName;
     const replace = req.body.replace;
 
     try {
         if(replace) {
-            await dbService.replaceUser(username, pwHash, func);
+            await dbService.replaceUser(username, pwHash, func, displayName);
         } else {
-            await dbService.addUser(username, pwHash, func);
+            await dbService.addUser(username, pwHash, func, displayName);
         }
     } catch(err) {
         resp.sendStatus(500);
@@ -20,42 +21,6 @@ exports.saveUser = async (req, resp) => {
     }
     userNumbers.set(username, 0);
     resp.sendStatus(200);
-    
-
-    /*
-    // tryLock
-    fileService.readJson('users.json', (err, json) => {
-        if(err) {
-            // unlock
-            console.error(err);
-            resp.sendStatus(500);
-        } else {
-            try {
-                let data = JSON.parse(json);
-                data[username] = {
-                    "pwHash": pwHash,
-                    "function": func
-                };
-                fileService.writeJson('users.json', data, (err) => {
-                    // update User Maps
-                    loadUsers();
-                    // unlock
-                    if(err) {
-                        console.error(err);
-                        resp.sendStatus(500);
-                    }
-                    resp.sendStatus(200);
-                });
-            } catch(e) {
-                // unlock
-                console.error(e);
-                resp.sendStatus(500);
-            }
-        }
-    });
-
-    */
-
 }
 
 
@@ -73,37 +38,6 @@ exports.removeUser = async (req, resp) => {
     userKeys.delete(username);
     userNames.delete(key);
     resp.sendStatus(200);
-
-
-
-    /*
-    // tryLock
-    fileService.readJson('users.json', (err, json) => {
-        if(err) {
-            // unlock
-            console.error(err);
-            resp.sendStatus(500);
-        } else {
-            try {
-                let data = JSON.parse(json);
-                delete data[username];
-                fileService.writeJson(data, 'users.json', (err) => {
-                    // update User Maps
-                    loadUsers();
-                    // unlock
-                    if(err) {
-                        console.error(err);
-                        resp.sendStatus(500);
-                    }
-                    resp.sendStatus(200);
-                });
-            } catch(e) {
-                // unlock
-                console.error(e);
-                resp.sendStatus(500);
-            }
-        }
-    })*/
 }
 
 exports.getUsers = async (req, resp) => {
@@ -116,26 +50,11 @@ exports.getUsers = async (req, resp) => {
         throw(err);
     }
 
-    users = users.map(({username, judgefunction}) => ({
+    users = users.map(({username, judgefunction, displayName}) => ({
         name: username,
-        function: judgefunction
-    }))
+        function: judgefunction,
+        displayName: displayName
+    }));
 
     resp.status(200).json(users);
-
-    /*
-    fileService.readJson('users.json', (err, json) => {
-        if(err) {
-            console.error(err);
-            resp.sendStatus(500);
-        } else {
-            let data = JSON.parse(json);
-            data = Object.entries(data).map(([key, value]) => ({
-                name: key,
-                function: value.function
-            }));
-            
-            resp.status(200).json(data);
-        }
-    });*/
 }

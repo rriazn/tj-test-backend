@@ -1,5 +1,5 @@
 const dbService = require('../services/databaseService');
-const { userNames, userNumbers, userKeys } = require('../services/userService');
+const { userNames, userNumbers, userKeys, userDisplayNames } = require('../services/userService');
 const crypto = require('crypto');
 
 exports.login = async (req, resp) => {
@@ -18,12 +18,14 @@ exports.login = async (req, resp) => {
     }
     if(input.user.passwordHash == userData[0].passwordHash) {
         const token = crypto.randomBytes(32).toString('hex');
-        userKeys[input.user.username] = token;
-        userNames[token] = input.user.username;
-        userNumbers[input.user.username] += 1;
+        userKeys.set(input.user.username, token);
+        userNames.set(token, input.user.username);
+        userNumbers.set(input.user.username, userNumbers.get(input.user.username) + 1);
+        const displayName = userDisplayNames.get(input.user.username);
         resp.status(200).json({user: {
             username: input.user.username,
-            token: userKeys[input.user.username]
+            token: userKeys.get(input.user.username),
+            displayName: displayName
         }});
     } else {
         resp.sendStatus(401);
@@ -34,8 +36,9 @@ exports.login = async (req, resp) => {
 exports.auth = (req, resp) => {
     const token = req.get('Authorization');
     resp.status(200).json({user: {
-            username: userNames[token],
-            token: token
+            username: userNames.get(token),
+            token: token,
+            displayName: userDisplayNames.get(userNames.get(token))
     }});
 }
 
@@ -47,11 +50,11 @@ exports.admin = (req, resp) => {
 
 exports.logout = (req, resp) => {
     const token = req.get('Authorization');
-    const user = userNames[token];
-    userNumbers[user] -= 1;
-    if(userNumbers[user] === 0) {
-        userNames[token] = null;
-        userKeys[user] = null;
+    const user = userNames.get(token);
+    userNumbers.set(user, userNumbers.get(user) - 1);
+    if(userNumbers.get(user) === 0) {
+        userNames.set(token, null);
+        userKeys.set(user, null);
     }
     resp.sendStatus(200);
 }

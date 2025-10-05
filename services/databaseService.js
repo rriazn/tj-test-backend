@@ -24,14 +24,13 @@ exports.connectDB = async () => {
 }
 
 exports.getAllUsernames = async () => {
-  const [usernames] = await db.query('SELECT username \
+  const [usernames] = await db.query('SELECT username, displayName \
                                       FROM judges');
-  const values = usernames.map(obj => obj.username);
-  return values;
+  return usernames;
 }
 
 exports.getAllUsers = async () => {
-  const [values] = await db.query('SELECT username, judgefunction \
+  const [values] = await db.query('SELECT username, judgefunction, displayName \
                                   FROM judges');
   return values;
 }
@@ -48,17 +47,17 @@ exports.getAdmin = async () => {
   return this.getUser('admin');
 }
 
-exports.addUser = async (username, pwHash, func) => {
-  await db.query("INSERT INTO judges (username, passwordhash, judgefunction) \
-                  VALUES (?, ?, ?)",
-     [username, pwHash, func]);
+exports.addUser = async (username, pwHash, func, displayName) => {
+  await db.query("INSERT INTO judges (username, passwordhash, judgefunction, displayName) \
+                  VALUES (?, ?, ?, ?)",
+     [username, pwHash, func, displayName]);
 }
 
-exports.replaceUser = async(username, pwHash, func) => {
+exports.replaceUser = async(username, pwHash, func, displayName) => {
   await db.query("UPDATE judges \
-                  SET passwordHash = ?, judgeFunction = ? \
+                  SET passwordHash = ?, judgeFunction = ?, displayName = ? \
                   WHERE username = ?",
-      [pwHash, func, username]);
+      [pwHash, func, username, displayName]);
 }
 
 exports.deleteUser = async (username) => {
