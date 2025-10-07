@@ -73,8 +73,8 @@ exports.getActivePartID = (req, resp) => {
 
 exports.nextPart = (req, resp) => {
     if(activeComp != null && activeGroupID != -1) {
-        if(activePartID < activeComp.groups[activeGroupID].participants.length - 1) {
-            activePartID++;
+        if(activePartID < activeComp.groups[activeGroupID].participants.length - 1 || activeComp.groups[activeGroupID].stage != 2) {
+            activePartID = (activePartID + 1) % activeComp.groups[activeGroupID].participants.length;
             resp.sendStatus(200);
         } else {
             resp.sendStatus(401);
